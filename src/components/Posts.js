@@ -5,6 +5,7 @@ import { fetchPosts } from '../actions/postActions';
 
 class Posts extends Component {
 
+
     componentDidMount(){
         this.props.fetchPosts();
     }
@@ -12,9 +13,10 @@ class Posts extends Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.newPost) {
             this.props.posts.unshift(nextProps.newPost);
+            
         }
     }
-
+    
     render() {
         const Panel = Collapse.Panel;
         const postItem = this.props.posts.map(post => (
@@ -26,7 +28,7 @@ class Posts extends Component {
             <div>
                 <Spin spinning={this.props.loading}><center></center></Spin>
                 <div style={{ marginTop: 16 }}>
-                    <Collapse bordered={false}>
+                    <Collapse bordered={false} key="collapse">
                         {postItem}
                     </Collapse>
                 </div>

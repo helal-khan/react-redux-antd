@@ -21,6 +21,13 @@ export const createPost = (postData) => dispatch => {
     });
 };
 
+export const visibleToggle = (visible) => dispatch=> {
+    return dispatch({
+        type: "VISIBLE",
+        payload: {visible:visible}
+    });
+}
+
 /*
 export const createPost = postData => dispatch => {
     Axios({
@@ -54,10 +61,6 @@ export const createPost = postData => dispatch => {
     //     );
 };
 */
-
-
-
-
 
 
 

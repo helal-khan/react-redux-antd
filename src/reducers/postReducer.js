@@ -1,8 +1,10 @@
+import {  message } from 'antd';
 const initialState = {
     items:[],
     item:{},
     loading: false,
-    showModal: false
+    visible: false,
+    btnLoader: false
 }
 
 export default function(state = initialState, action){
@@ -20,12 +22,21 @@ export default function(state = initialState, action){
             }
         case "NEW_POST_PENDING":
             return{
-                ...state
+                ...state,
+                btnLoader: true
             }
         case "NEW_POST_FULFILLED":
             return{
                 ...state,
-                item: action.payload.data
+                item: action.payload.data,
+                visible: false,
+                btnLoader: false,
+                msg: message.success('New post added successfully')
+            }
+        case "VISIBLE":
+            return{
+                ...state,
+                visible: action.payload.visible
             }
         default:
             return state;

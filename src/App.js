@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { Row, Col, Layout, Breadcrumb } from 'antd';
 import 'antd/dist/antd.css';
 import {Provider} from 'react-redux';
-
 import Header from './components/Header';
 import Posts from './components/Posts';
 import PostFormModal from './components/PostFormModal';
 import store from './store';
-
 
 class App extends Component {
 

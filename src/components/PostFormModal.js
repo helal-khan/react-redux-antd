@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Modal, Button, Input } from 'antd';
 import '../App.css';
 import {connect} from 'react-redux';
-import { createPost } from '../actions/postActions';
+import { createPost,visibleToggle } from '../actions/postActions';
 
 const FormItem = Form.Item;
 
@@ -11,8 +11,6 @@ class PostFormModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading:false,
-            visible: false,
             title: '',
             body: ''
         };
@@ -26,31 +24,28 @@ class PostFormModal extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.setState({ loading: true });
                 const post = {
                     title: this.state.title,
                     body: this.state.body
                 };
                 this.props.createPost(post);
-                this.setState({ loading: false,visible: false });
             }
         });
     }
 
     showModal = () => {
-        this.setState({
-            visible: true,
+        this.props.visibleToggle(!this.props.visible);
+        this.props.form.setFieldsValue({
             title: '',
-            body: ''
+            body:''
         });
     }
     
     handleCancel = () => {
-        this.setState({ visible: false });
+        this.props.visibleToggle(!this.props.visible);
     }
 
     render() {
-        const { visible } = this.state;
         const { TextArea } = Input;
         const { getFieldDecorator } = this.props.form;
         return (
@@ -59,7 +54,7 @@ class PostFormModal extends Component {
                     Add new post
                 </Button>
                 <Modal
-                    visible={visible}
+                    visible={this.props.visible}
                     title="Add new post"
                     onCancel={this.handleCancel}
                     footer={null}
@@ -69,7 +64,7 @@ class PostFormModal extends Component {
                             {getFieldDecorator('title', {
                                 rules: [{ required: true, message: 'Please write title here!' }],
                             })(
-                                <Input name="title" placeholder="Title" onChange={this.onChange} value={this.state.title} />
+                                <Input name="title" placeholder="Title" onChange={this.onChange} />
                             )}
                         </FormItem>
                         <FormItem>
@@ -80,7 +75,7 @@ class PostFormModal extends Component {
                             )}
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" htmlType="submit" className="login-form-button" loading={this.state.loading}>
+                            <Button type="primary" htmlType="submit" className="login-form-button" loading={this.props.btnLoader}>
                                 Submit
                             </Button>
                             <Button key="back" onClick={this.handleCancel}>Close</Button>
@@ -96,9 +91,10 @@ const WrappedPostFormModal = Form.create()(PostFormModal);
 
 const mapStateToProps = state => {
     return {
-        loading: state.posts.loading,
-        showModal: state.posts.showModal
+        btnLoader: state.posts.btnLoader,
+        visible: state.posts.visible
+
     };
 };
 
-export default connect(mapStateToProps,{createPost})(WrappedPostFormModal);
+export default connect(mapStateToProps,{createPost,visibleToggle})(WrappedPostFormModal);
